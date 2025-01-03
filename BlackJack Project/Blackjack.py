@@ -4,30 +4,28 @@ import pygame
 
 pygame.init()
 
-# Define card values and deck
+#cards/deck
 cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 one_deck = 4 * cards 
 decks = 4 
 
-# Screen dimensions and setup
+#screen size  and setup
 WIDTH = 600
 HEIGHT = 900
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption('Pygame Blackjack!')
-
-# Game constants
 fps = 60
 casino_green = (0, 102, 51) 
 font = pygame.font.Font('freesansbold.ttf', 44)
 smaller_font = pygame.font.Font('freesansbold.ttf', 36)
 
-# Load sound effects
+#sound effects
 card_deal_sound = pygame.mixer.Sound('card_deal.wav')
 win_sound = pygame.mixer.Sound('win.wav')
 lose_sound = pygame.mixer.Sound('lose.wav')
 button_click_sound = pygame.mixer.Sound('button_click.wav')
 
-# Initialize game variables
+#game varaibles
 active = False
 records = [0, 0, 0] 
 player_score = 0
@@ -42,14 +40,14 @@ add_score = False
 results = ['', '', '', '', 'TIE GAME...']
 sound_played = False
 
-# Function to deal a card to a hand
+#function for hand cards
 def deal_cards(current_hand, current_deck):
     card = random.randint(0, len(current_deck) - 1)  
     current_hand.append(current_deck.pop(card))  
     pygame.mixer.Sound.play(card_deal_sound)  
     return current_hand, current_deck
 
-# Function to calculate the score of a hand
+#score of a hand
 def calculate_score(hand):
     hand_score = 0
     aces_count = hand.count('A') 
@@ -61,20 +59,20 @@ def calculate_score(hand):
         elif card == 'A':
             hand_score += 11 
 
-    # Adjust score if there are Aces and the score exceeds 21
+    #score adjsut with 21 and aces
     while hand_score > 21 and aces_count > 0:
         hand_score -= 10
         aces_count -= 1
 
     return hand_score
 
-# Function to draw the scores on the screen
+#display of score
 def draw_scores(player, dealer):
     screen.blit(font.render(f'Score[{player}]', True, 'white'), (350, 400))
     if reveal_dealer:
         screen.blit(font.render(f'Score[{dealer}]', True, 'white'), (350, 100))
 
-# Function to draw the cards on the screen
+#to see the cards on the screen
 def draw_cards(player, dealer, reveal):
     for i, card in enumerate(player):
         pygame.draw.rect(screen, 'white', [70 + (70 * i), 460 + (5 * i), 120, 220], 0, 5)
@@ -89,7 +87,7 @@ def draw_cards(player, dealer, reveal):
             screen.blit(font.render('???', True, 'black'), (75 + 70 * i, 165 + 5 * i))
         pygame.draw.rect(screen, 'blue', [70 + (70 * i), 160 + (5 * i), 120, 220], 5, 5)
 
-# Function to draw game elements such as buttons and results
+#buttons and results
 def draw_game(act, record, result):
     button_list = []
 
@@ -121,7 +119,7 @@ def draw_game(act, record, result):
 
     return button_list
 
-# Function to check the endgame state
+#endgame state
 def check_endgame(hand_act, deal_score, play_score, result, totals, add, sound_played):
     if not hand_act and deal_score >= 17:
         if play_score > 21:
@@ -153,7 +151,7 @@ def check_endgame(hand_act, deal_score, play_score, result, totals, add, sound_p
 
     return result, totals, add, sound_played
 
-# Main game loop
+#the game loop
 run = True
 while run:
     timer = pygame.time.Clock()
